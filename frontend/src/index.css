@@ -1,0 +1,288 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+
+  /* Background / Foreground */
+  --color-background: var(--white);
+  --color-foreground: var(--gray-800);
+
+  --color-card: var(--white);
+  --color-card-foreground: var(--gray-200);
+
+  --color-popover: var(--white);
+  --color-popover-foreground: var(--gray-800);
+
+  /* ========== PRIMARY (Brand) ========== */
+  --color-primary: var(--brand-base);
+  --color-primary-foreground: var(--black);
+
+  /* ========== SECONDARY ========== */
+  --color-secondary: var(--gray-100);
+  --color-secondary-foreground: var(--gray-800);
+  /* ========== MUTED ========== */
+  --color-muted: var(--gray-100);
+  --muted-foreground: var(--gray-500);
+
+  /* ========== ACCENT (Success) ========== */
+  --color-accent: var(--success);
+  --color-accent-foreground: var(--white);
+
+  /* ========== DESTRUCTIVE (Danger) ========== */
+  --color-destructive: var(--danger);
+  --color-destructive-foreground: var(--white);
+
+  /* ========== BORDERS / INPUTS ========== */
+  --color-border: var(--gray-200);
+  --color-input: var(--gray-200);
+  --color-ring: var(--brand-base);
+
+  /* ========== CHARTS (opcional, mas correto) ========== */
+  --color-chart-1: var(--blue-base);
+  --color-chart-2: var(--purple-base);
+  --color-chart-3: var(--orange-base);
+  --color-chart-4: var(--yellow-base);
+  --color-chart-5: var(--green-base);
+
+  /* ========== SIDEBAR ========== */
+  --color-sidebar: var(--white);
+  --color-sidebar-foreground: var(--gray-800);
+
+  --color-sidebar-primary: var(--brand-base);
+  --color-sidebar-primary-foreground: var(--black);
+
+  --color-sidebar-accent: var(--green-light);
+  --color-sidebar-accent-foreground: var(--green-dark);
+  --color-sidebar-border: var(--gray-200);
+  --color-sidebar-ring: var(--brand-base);
+
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  /* Brand */
+  --color-brand: var(--brand-base);
+  --color-brand-foreground: var(--black);
+
+  /* Feedback */
+  --color-success: var(--success);
+  --color-danger: var(--danger);
+
+  /* Grayscale */
+  --color-gray-50: var(--gray-50);
+  --color-gray-100: var(--gray-100);
+  --color-gray-200: var(--gray-200);
+  --color-gray-300: var(--gray-300);
+  --color-gray-400: var(--gray-400);
+  --color-gray-500: var(--gray-500);
+  --color-gray-600: var(--gray-600);
+  --color-gray-700: var(--gray-700);
+  --color-gray-800: var(--gray-800);
+
+  /* ===============================
+   * Blue
+   * =============================== */
+  --color-blue-dark: var(--blue-dark);
+  --color-blue-base: var(--blue-base);
+  --color-blue-light: var(--blue-light);
+
+  /* ===============================
+   * Purple
+   * =============================== */
+  --color-purple-dark: var(--purple-dark);
+  --color-purple-base: var(--purple-base);
+  --color-purple-light: var(--purple-light);
+
+  /* ===============================
+   * Pink
+   * =============================== */
+  --color-pink-dark: var(--pink-dark);
+  --color-pink-base: var(--pink-base);
+  --color-pink-light: var(--pink-light);
+
+  /* ===============================
+   * Red
+   * =============================== */
+  --color-red-dark: var(--red-dark);
+  --color-red-base: var(--red-base);
+  --color-red-light: var(--red-light);
+
+  /* ===============================
+   * Orange
+   * =============================== */
+  --color-orange-dark: var(--orange-dark);
+  --color-orange-base: var(--orange-base);
+  --color-orange-light: var(--orange-light);
+
+  /* ===============================
+   * Yellow
+   * =============================== */
+  --color-yellow-dark: var(--yellow-dark);
+  --color-yellow-base: var(--yellow-base);
+  --color-yellow-light: var(--yellow-light);
+
+  /* ===============================
+   * Green
+   * =============================== */
+  --color-green-dark: var(--green-dark);
+  --color-green-base: var(--green-base);
+  --color-green-light: var(--green-light);
+}
+
+:root {
+  /* ========== Brand ========== */
+  --brand-dark: #124b2b;
+  --brand-base: #1f6f43;
+
+  /* ========== Grayscale ========== */
+  --gray-100: #f8f9fa;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #111827;
+
+  /* ========== Neutral ========== */
+  --black: #000000;
+  --white: #ffffff;
+
+  /* ========== Feedback ========== */
+  --success: #19ad70;
+  --danger: #ef4444;
+
+  /* ========== Blue ========== */
+  --blue-dark: #1d4ed8;
+  --blue-base: #2563eb;
+  --blue-light: #dbeafe;
+
+  /* ========== Purple ========== */
+  --purple-dark: #7e22ce;
+  --purple-base: #9333ea;
+  --purple-light: #f3e8ff;
+
+  /* ========== Pink ========== */
+  --pink-dark: #be185d;
+  --pink-base: #db2777;
+  --pink-light: #fce7f3;
+
+  /* ========== Red ========== */
+  --red-dark: #b91c1c;
+  --red-base: #dc2626;
+  --red-light: #fee2e2;
+
+  /* ========== Orange ========== */
+  --orange-dark: #c2410c;
+  --orange-base: #ea580c;
+  --orange-light: #ffedd5;
+
+  /* ========== Yellow ========== */
+  --yellow-dark: #a16207;
+  --yellow-base: #ca8a04;
+  --yellow-light: #f7f3ca;
+
+  /* ========== Green ========== */
+  --green-dark: #15803d;
+  --green-base: #16a34a;
+  --green-light: #e0fae9;
+
+  --radius: 0.625rem;
+}
+
+@layer base {
+  body {
+    @apply text-foreground border-gray-200;
+  }
+}
+
+.green {
+  @apply text-green-base;
+}
+
+.blue {
+  @apply text-blue-base;
+}
+
+.purple {
+  @apply text-purple-base;
+}
+
+.pink {
+  @apply text-pink-base;
+}
+
+.red {
+  @apply text-red-base;
+}
+
+.orange {
+  @apply text-orange-base;
+}
+
+.yellow {
+  @apply text-yellow-base;
+}
+
+.bg-green {
+  @apply bg-green-base;
+}
+
+.bg-blue {
+  @apply bg-blue-base;
+}
+
+.bg-purple {
+  @apply bg-purple-base;
+}
+
+.bg-pink {
+  @apply bg-pink-base;
+}
+
+.bg-red {
+  @apply bg-red-base;
+}
+
+.bg-orange {
+  @apply bg-orange-base;
+}
+
+.bg-yellow {
+  @apply bg-yellow-base;
+}
+
+.secondary-green {
+  @apply bg-green-light;
+}
+
+.secondary-blue {
+  @apply bg-blue-light;
+}
+
+.secondary-purple {
+  @apply bg-purple-light;
+}
+
+.secondary-pink {
+  @apply bg-pink-light;
+}
+
+.secondary-red {
+  @apply bg-red-light;
+}
+
+.secondary-orange {
+  @apply bg-orange-light;
+}
+
+.secondary-yellow {
+  @apply bg-yellow-light;
+}
