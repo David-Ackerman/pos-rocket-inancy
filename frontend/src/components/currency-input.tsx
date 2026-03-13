@@ -5,10 +5,12 @@ import { type ComponentProps } from "react";
 export const CurrencyInput = ({
   value,
   changeValue,
+  error,
   ...props
 }: {
   value: number;
   changeValue: (value: number) => void;
+  error?: string;
 } & ComponentProps<"input">) => {
   function formatCurrencyFromCents(cents: number) {
     return (cents / 100).toLocaleString("pt-BR", {
@@ -34,9 +36,11 @@ export const CurrencyInput = ({
         id="value"
         value={formatCurrencyFromCents(value)}
         onChange={handleChange}
-        className="w-full h-12"
+        data-error={!!error}
+        className="w-full h-12 data-[error=true]:border-red-500 data-[error=true]:focus-visible:ring-red-500"
         {...props}
       />
+      {error && <p className="text-sm text-red-500">{error}</p>}
     </div>
   );
 };

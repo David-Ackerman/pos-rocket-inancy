@@ -15,6 +15,9 @@ export function ColorRadioGroup({ value, onChange }: KindSelectionGroupProps) {
       defaultValue={value}
       onValueChange={onChange}
       className="flex justify-between"
+      name="color"
+      id="color"
+      required
     >
       {primaryColors.map((name) => (
         <FieldLabel

@@ -11,9 +11,10 @@ import {
 interface DatePickerProps {
   date: Date | undefined;
   onDateChange: (date: Date) => void;
+  error?: string;
 }
 
-export function DatePicker({ date, onDateChange }: DatePickerProps) {
+export function DatePicker({ date, onDateChange, error }: DatePickerProps) {
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -25,8 +26,9 @@ export function DatePicker({ date, onDateChange }: DatePickerProps) {
         <PopoverTrigger asChild>
           <Button
             variant="outline"
+            data-error={!!error}
             id="date"
-            className="justify-start font-normal h-12"
+            className="justify-start font-normal h-12 data-[error=true]:border-red-500 data-[error=true]:focus-visible:ring-red-500"
           >
             {date ? date.toLocaleDateString() : "Select date"}
           </Button>
@@ -37,6 +39,7 @@ export function DatePicker({ date, onDateChange }: DatePickerProps) {
             selected={date}
             defaultMonth={date}
             captionLayout="dropdown"
+            required
             onSelect={(date) => {
               if (!date) return;
               onDateChange(date);
@@ -45,6 +48,7 @@ export function DatePicker({ date, onDateChange }: DatePickerProps) {
           />
         </PopoverContent>
       </Popover>
+      {error && <p className="text-sm text-red-500">{error}</p>}
     </Field>
   );
 }

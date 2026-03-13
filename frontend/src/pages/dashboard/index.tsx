@@ -58,6 +58,7 @@ export function Dashboard() {
               Saldo total
             </CardTitle>
             <CardDescription className="text-gray-800 leading-8 text-[1.75rem] font-bold">
+              R${" "}
               {(data?.listTransactions.data.reduce((total, transaction) => {
                 if (transaction.kind === "income") {
                   return total + transaction.amount;
@@ -75,6 +76,7 @@ export function Dashboard() {
               Receitas do mês
             </CardTitle>
             <CardDescription className="text-gray-800 leading-8 text-[1.75rem] font-bold">
+              R${" "}
               {(data?.listTransactions.data.reduce((total, transaction) => {
                 if (transaction.kind === "income") {
                   return total + transaction.amount;
@@ -92,6 +94,7 @@ export function Dashboard() {
               Despesas do mês
             </CardTitle>
             <CardDescription className="text-gray-800 leading-8 text-[1.75rem] font-bold">
+              R${" "}
               {(data?.listTransactions.data.reduce((total, transaction) => {
                 if (transaction.kind === "expense") {
                   return total + transaction.amount;

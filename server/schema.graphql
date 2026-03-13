@@ -52,7 +52,7 @@ type LoginOutput {
 type Mutation {
   createCategory(data: CreateCategoryInput!): CategoryModel!
   createTransaction(data: CreateTransactionInput!): TransactionModel!
-  deleteIdea(id: String!): Boolean!
+  deleteCategory(id: String!): Boolean!
   deleteTransaction(id: String!): Boolean!
   login(data: LoginInput!): LoginOutput!
   register(data: RegisterInput!): RegisterOutput!

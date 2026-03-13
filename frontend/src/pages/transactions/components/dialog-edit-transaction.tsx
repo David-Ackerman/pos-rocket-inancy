@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { toast } from "sonner";
-import { CREATE_TRANSACTION } from "@/lib/graphql/mutations/transaction";
+import { UPDATE_TRANSACTION } from "@/lib/graphql/mutations/transaction";
 import { KindSelectionGroup } from "@/components/kind-selection-group";
 
 import { DatePicker } from "@/components/date-picker";
@@ -25,28 +25,33 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { CurrencyInput } from "@/components/currency-input";
+import type { Transaction } from "@/types";
 
-interface CreateTransactionDialogProps {
+interface EditTransactionDialogProps {
   open: boolean;
   onOpenChange: (oepn: boolean) => void;
-  onCreated?: () => void;
+  onEdited?: () => void;
   categories: {
     id: string;
     title: string;
   }[];
+  transaction: Transaction;
 }
 
-export function CreateTransactionDialog({
+export function EditTransactionDialog({
   open,
   onOpenChange,
-  onCreated,
+  onEdited,
   categories,
-}: CreateTransactionDialogProps) {
-  const [kind, setKind] = useState("expense");
-  const [description, setDescription] = useState("");
-  const [transactionDate, setTransactionDate] = useState(new Date());
-  const [amount, setAmount] = useState(0);
-  const [categoryId, setCategoryId] = useState("");
+  transaction,
+}: EditTransactionDialogProps) {
+  const [kind, setKind] = useState<string>(transaction.kind);
+  const [description, setDescription] = useState(transaction.description || "");
+  const [transactionDate, setTransactionDate] = useState(
+    new Date(transaction.transactionDate),
+  );
+  const [amount, setAmount] = useState(transaction.amount);
+  const [categoryId, setCategoryId] = useState(transaction.categoryId);
   const [errors, setErrors] = useState({
     description: "",
     transactionDate: "",
@@ -54,14 +59,14 @@ export function CreateTransactionDialog({
     categoryId: "",
   });
 
-  const [createTransaction, { loading }] = useMutation(CREATE_TRANSACTION, {
+  const [createTransaction, { loading }] = useMutation(UPDATE_TRANSACTION, {
     onCompleted() {
-      toast.success("Transação criada com sucesso");
+      toast.success("Transação editada com sucesso");
       onOpenChange(false);
-      onCreated?.();
+      onEdited?.();
     },
     onError() {
-      toast.error("Falha ao criar a transação");
+      toast.error("Falha ao editar a transação");
     },
   });
 
@@ -97,28 +102,15 @@ export function CreateTransactionDialog({
           transactionDate: transactionDate.toISOString(),
           amount,
           categoryId,
+          id: transaction.id,
         },
+        id: transaction.id,
       },
     });
   };
 
-  const handleCancel = () => {
-    setKind("expense");
-    setTransactionDate(new Date());
-    setDescription("");
-    setAmount(0);
-    setCategoryId("");
-    onOpenChange(false);
-  };
-
   return (
-    <Dialog
-      open={open}
-      onOpenChange={(value) => {
-        if (value) return onOpenChange(true);
-        handleCancel();
-      }}
-    >
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         showCloseButton={false}
         className="bg-white border-gray-200 gap-6"
@@ -126,7 +118,7 @@ export function CreateTransactionDialog({
         <DialogHeader className="flex flex-row justify-between">
           <div className="space-y-2">
             <DialogTitle className="text-2xl font-bold leading-tight">
-              Nova transação
+              Editar transação
             </DialogTitle>
             <DialogDescription className="text-sm text-muted-foreground">
               Registre sua despesa ou receita.

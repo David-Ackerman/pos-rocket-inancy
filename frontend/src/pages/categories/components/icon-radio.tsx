@@ -20,6 +20,9 @@ export function IconRadio({ value, onChange }: KindSelectionGroupProps) {
       defaultValue={value}
       onValueChange={onChange}
       className="grid grid-cols-8 w-full"
+      required
+      name="icon"
+      id="icon"
     >
       {mappedIcons.map(({ value, Icon }) => (
         <FieldLabel

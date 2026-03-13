@@ -47,7 +47,7 @@ export class CategoryResolver {
   }
 
   @Mutation(() => Boolean)
-  async deleteIdea(@Arg("id", () => String) id: string): Promise<boolean> {
+  async deleteCategory(@Arg("id", () => String) id: string): Promise<boolean> {
     return this.categoryService.deleteCategory(id);
   }
 

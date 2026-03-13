@@ -17,9 +17,17 @@ import { getSecondaryColor, icons } from "@/utils/categories-utils";
 import { cn } from "@/lib/utils";
 import { CreateCategoryDialog } from "./components/create-category";
 import { Badge } from "@/components/ui/badge";
+import { DeleteCategoryDialog } from "./components/delete-category";
+import { EditCategoryDialog } from "./components/edit-category";
 
 export function Categories() {
   const [openDialog, setOpenDialog] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
+    null,
+  );
 
   const {
     data: categoriesData,
@@ -28,6 +36,16 @@ export function Categories() {
   } = useQuery<{
     listCategories: Category[];
   }>(LIST_CATEGORIES);
+
+  function handleDeleteCategory(category: Category) {
+    setSelectedCategory(category);
+    setDeleteDialogOpen(true);
+  }
+
+  function handleEditCategory(category: Category) {
+    setSelectedCategory(category);
+    setEditDialogOpen(true);
+  }
 
   return (
     <Page page="categories">
@@ -92,10 +110,16 @@ export function Categories() {
         </Card>
       </div>
 
+      {categoriesLoading && (
+        <div className="py-10 flex flex-col items-center gap-3">
+          <ArrowUpDown className="size-6 text-gray-400 animate-spin" />
+          <p className="text-gray-500 text-sm">Carregando categorias...</p>
+        </div>
+      )}
       <div className="grid grid-cols-4 gap-4 mt-8">
         {categoriesData?.listCategories.map((category) => (
           <Card>
-            <CardContent className="space-y-5">
+            <CardContent className="flex flex-col justify-between flex-1 gap-5">
               <CardHeader className="flex justify-between w-full p-0">
                 <CustomIcon
                   Icon={icons.find((icon) => icon.name === category.icon)!.Icon}
@@ -103,15 +127,27 @@ export function Categories() {
                 />
 
                 <div className="flex gap-2">
-                  <Button variant="outline" size="icon" className="rounded-sm">
+                  <Button
+                    type="button"
+                    onClick={() => handleDeleteCategory(category)}
+                    variant="outline"
+                    size="icon"
+                    className="rounded-sm"
+                  >
                     <Trash className="size-4 text-danger" />
                   </Button>
-                  <Button variant="outline" size="icon" className="rounded-sm">
+                  <Button
+                    type="button"
+                    onClick={() => handleEditCategory(category)}
+                    variant="outline"
+                    size="icon"
+                    className="rounded-sm"
+                  >
                     <SquarePen className="size-4 text-gray-700" />
                   </Button>
                 </div>
               </CardHeader>
-              <div className="flex flex-col gap-1">
+              <div className="flex-1 flex flex-col gap-1">
                 <strong className="font-semibold text-gray-800">
                   {category.title}
                 </strong>
@@ -127,7 +163,7 @@ export function Categories() {
                   {category.title}
                 </Badge>
                 {category.transactionsCount > 0 && (
-                  <span>
+                  <span className="text-gray-600">
                     {category.transactionsCount}{" "}
                     {category.transactionsCount > 1 ? "itens" : "item"}
                   </span>
@@ -142,6 +178,28 @@ export function Categories() {
         onOpenChange={setOpenDialog}
         onCreated={() => refetch()}
       />
+      <DeleteCategoryDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        categoryId={selectedCategory?.id || ""}
+        onDeleted={() => {
+          refetch();
+          setDeleteDialogOpen(false);
+          setSelectedCategory(null);
+        }}
+      />
+      {selectedCategory && (
+        <EditCategoryDialog
+          open={editDialogOpen}
+          onOpenChange={setEditDialogOpen}
+          category={selectedCategory!}
+          onUpdated={() => {
+            refetch();
+            setEditDialogOpen(false);
+            setSelectedCategory(null);
+          }}
+        />
+      )}
     </Page>
   );
 }

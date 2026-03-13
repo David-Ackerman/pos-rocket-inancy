@@ -2,7 +2,7 @@ import { Page } from "@/components/page";
 
 import { Plus } from "lucide-react";
 import { useState } from "react";
-import type { Category, PaginatedTransactions } from "@/types";
+import type { Category, PaginatedTransactions, Transaction } from "@/types";
 import { LIST_TRANSACTIONS } from "@/lib/graphql/queries/transaction";
 import { useQuery } from "@apollo/client/react";
 import { LIST_CATEGORIES } from "@/lib/graphql/queries/categories";
@@ -10,9 +10,17 @@ import { Button } from "@/components/ui/button";
 import { CreateTransactionDialog } from "@/components/create-transaction-dialog";
 import { TransactionsList } from "./components/transactions-list";
 import { Filter } from "./components/filter";
+import { EditTransactionDialog } from "./components/dialog-edit-transaction";
+import { DeleteTransactionDialog } from "./components/dialog-delete-transaction";
 
 export function Transactions() {
   const [openDialog, setOpenDialog] = useState(false);
+  const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+
+  const [transactionSelected, setTransactionSelected] =
+    useState<Transaction | null>();
+
   const [currentPage, setCurrentPage] = useState(1);
   const [filter, setFilter] = useState({
     search: "",
@@ -24,7 +32,7 @@ export function Transactions() {
   });
   const itemsPerPage = 10;
 
-  const { data, loading, refetch } = useQuery<{
+  const { data, refetch } = useQuery<{
     listTransactions: PaginatedTransactions;
   }>(LIST_TRANSACTIONS, {
     variables: {
@@ -43,6 +51,16 @@ export function Transactions() {
   const { data: categoriesData, loading: categoriesLoading } = useQuery<{
     listCategories: Category[];
   }>(LIST_CATEGORIES);
+
+  function deleteTransaction(transaction: Transaction) {
+    setTransactionSelected(transaction);
+    setOpenDeleteDialog(true);
+  }
+
+  function editTransaction(transaction: Transaction) {
+    setTransactionSelected(transaction);
+    setOpenEditDialog(true);
+  }
 
   return (
     <Page page="transactions">
@@ -74,6 +92,8 @@ export function Transactions() {
         totalItems={data?.listTransactions.totalItems ?? 0}
         perPage={itemsPerPage}
         setCurrentPage={setCurrentPage}
+        deleteTransaction={deleteTransaction}
+        editTransaction={editTransaction}
       />
 
       <CreateTransactionDialog
@@ -82,6 +102,33 @@ export function Transactions() {
         onCreated={() => refetch()}
         categories={categoriesData?.listCategories || []}
       />
+      {transactionSelected && (
+        <>
+          <EditTransactionDialog
+            key={transactionSelected.id}
+            transaction={transactionSelected}
+            categories={categoriesData?.listCategories || []}
+            onOpenChange={setOpenEditDialog}
+            open={openEditDialog}
+            onEdited={() => {
+              refetch();
+              setTransactionSelected(null);
+              setOpenEditDialog(false);
+            }}
+          />
+          <DeleteTransactionDialog
+            key={transactionSelected.id}
+            onOpenChange={setOpenDeleteDialog}
+            open={openDeleteDialog}
+            transaction={transactionSelected}
+            onDeleted={() => {
+              refetch();
+              setTransactionSelected(null);
+              setOpenDeleteDialog(false);
+            }}
+          />
+        </>
+      )}
     </Page>
   );
 }

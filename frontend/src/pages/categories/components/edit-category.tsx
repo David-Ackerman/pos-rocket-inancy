@@ -12,42 +12,46 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { toast } from "sonner";
-import { CREATE_CATEGORY } from "@/lib/graphql/mutations/category";
+import { UPDATE_CATEGORY } from "@/lib/graphql/mutations/category";
 import { IconRadio } from "./icon-radio";
 import { ColorRadioGroup } from "./color-radio-group";
+import type { Category } from "@/types";
 
-interface CreateCategoryDialogProps {
+interface EditCategoryDialogProps {
   open: boolean;
   onOpenChange: (oepn: boolean) => void;
-  onCreated?: () => void;
+  onUpdated?: () => void;
+  category: Category;
 }
 
-export function CreateCategoryDialog({
+export function EditCategoryDialog({
   open,
   onOpenChange,
-  onCreated,
-}: CreateCategoryDialogProps) {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [icon, setIcon] = useState("");
-  const [color, setColor] = useState("");
+  onUpdated,
+  category,
+}: EditCategoryDialogProps) {
+  const [title, setTitle] = useState(category?.title);
+  const [description, setDescription] = useState(category?.description);
+  const [icon, setIcon] = useState(category?.icon);
+  const [color, setColor] = useState(category?.color);
 
-  const [createCategory, { loading }] = useMutation(CREATE_CATEGORY, {
+  const [updateCategory, { loading }] = useMutation(UPDATE_CATEGORY, {
     onCompleted() {
-      toast.success("Categoria criada com sucesso");
+      toast.success("Categoria atualizada com sucesso");
       onOpenChange(false);
-      onCreated?.();
+      onUpdated?.();
     },
     onError() {
-      toast.error("Falha ao criar a categoria");
+      toast.error("Falha ao atualizar a categoria");
     },
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    createCategory({
+    updateCategory({
       variables: {
+        id: category?.id,
         data: {
           title,
           description,
@@ -60,12 +64,10 @@ export function CreateCategoryDialog({
   };
 
   const handleCancel = () => {
-    setTitle("");
-    setDescription("");
-    setIcon("");
-    setColor("");
     onOpenChange(false);
   };
+
+  if (!category) return null;
 
   return (
     <Dialog
@@ -82,7 +84,7 @@ export function CreateCategoryDialog({
         <DialogHeader className="flex flex-row justify-between">
           <div className="space-y-2">
             <DialogTitle className="text-2xl font-bold leading-tight">
-              Nova categoria
+              Editar categoria
             </DialogTitle>
             <DialogDescription className="text-sm text-muted-foreground">
               Organize suas transações com categorias

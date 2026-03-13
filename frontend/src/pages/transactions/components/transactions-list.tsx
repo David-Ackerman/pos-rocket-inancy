@@ -15,6 +15,8 @@ interface TransactionsCardProps {
   page: number;
   perPage: number;
   setCurrentPage: (page: number) => void;
+  deleteTransaction: (transaction: Transaction) => void;
+  editTransaction: (transaction: Transaction) => void;
 }
 
 export function TransactionsList({
@@ -24,6 +26,8 @@ export function TransactionsList({
   page,
   perPage,
   setCurrentPage,
+  deleteTransaction,
+  editTransaction,
 }: TransactionsCardProps) {
   return (
     <Card className="w-full p-0">
@@ -128,6 +132,8 @@ export function TransactionsList({
                 variant="outline"
                 size="icon"
                 className="rounded-sm size-8"
+                onClick={() => deleteTransaction(transaction)}
+                type="button"
               >
                 <Trash className="size-4 text-danger" />
               </Button>
@@ -135,6 +141,8 @@ export function TransactionsList({
                 variant="outline"
                 size="icon"
                 className="rounded-sm size-8"
+                onClick={() => editTransaction(transaction)}
+                type="button"
               >
                 <SquarePen className="size-4 text-gray-700" />
               </Button>
